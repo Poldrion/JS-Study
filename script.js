@@ -1,10 +1,3 @@
-// ИГРА
-// Нажав на кнопку начать игра запускается, генерируется задача, пользователь может ввести ответ,
-// должна появиться кнопка проверить
-
-// Нажав кнопку проверить мы сравниваем ввод пользователя с ответом,
-// Вывести результат и правильное значение, сменить кнопку на начать заново
-
 const getRandomNumInRange = (min, max) => {
   const randomNum = (Math.random() * (max - min) + min).toFixed(0);
   return randomNum;
@@ -85,22 +78,6 @@ for (let i = 0; i < choosedEl.length; i++) {
   choosedEl[i].addEventListener("click", eventFunc);
 }
 
-// const timeIsOver = () => {
-//   alert("Время вышло!");
-// };
-
-// // setTimeout(timeIsOver, 2000);
-// // const alarm = setInterval(timeIsOver, 3000);
-
-// const alarm = setInterval(() => {
-//   let wantToSleep = confirm("Хотите ли вы спать?");
-//   if (wantToSleep) {
-//     console.log("tic");
-//   } else {
-//     clearInterval(alarm);
-//   }
-// }, 3000);
-
 const postsBlock = document.querySelector(".posts_block-container");
 const showPostsBTN = document.querySelector(".posts_block button");
 
@@ -128,26 +105,68 @@ function getPosts() {
     .catch((err) => console.log(err.message));
 }
 
-// function createPost(title, body, userId) {
-//   fetch("https://jsonplaceholder.typicode.com/posts", {
-//     method: "POST",
-//     body: JSON.stringify({
-//       title: title,
-//       body: body,
-//       userId: userId,
-//     }),
-//     headers: {
-//       "Content-type": "application/json; charset=UTF-8",
-//     },
-//   })
-//     .then((res) => {
-//       console.log(res);
-//       return res.json();
-//     })
-//     .catch((err) => console.log(err.message));
-// }
-// createPost("title", "body", 15);
+async function getData() {
+  const response = await fetch("https://jsonplaceholder.typicode.com/posts");
+  const data = await response.json();
+  return data;
+}
 
-showPostsBTN.onclick = () => {
-  getPosts();
-};
+async function main() {
+  const postsData = await getData();
+  let currentPage = 1;
+  let rows = 10;
+
+  function displayList(arrData, rowPerPage, page) {
+    // const postsEl = document.querySelector(".posts_block-container");
+    postsBlock.innerHTML = "";
+    page--;
+
+    const start = rowPerPage * page;
+    const end = start + rowPerPage;
+    const paginatedData = arrData.slice(start, end);
+
+    paginatedData.forEach((element) => {
+      // const postEl = document.createElement("div");
+      // postEl.classList.add("posts_block-container");
+      // postEl.innerText = `${element.title}`;
+      addPost(element.title, element.body);
+      // postsEl.appendChild(postEl);
+    });
+  }
+  function displayPagination(arrData, rowPerPage) {
+    const paginationEl = document.querySelector(".pagination");
+    const pagesCount = Math.ceil(arrData.length / rowPerPage);
+    const ulEl = document.createElement("ul");
+    ulEl.classList.add("pagination__list");
+
+    for (let i = 0; i < pagesCount; i++) {
+      const liEl = displayPaginationBTN(i + 1);
+      ulEl.appendChild(liEl);
+    }
+    paginationEl.appendChild(ulEl);
+  }
+  function displayPaginationBTN(page) {
+    const liEl = document.createElement("li");
+    liEl.classList.add("pagination__item");
+    liEl.innerText = page;
+
+    if (currentPage == page) {
+      liEl.classList.add("pagination__item--active");
+    }
+
+    liEl.addEventListener("click", () => {
+      currentPage = page;
+      displayList(postsData, rows, currentPage);
+
+      let currentItemLi = document.querySelector("li.pagination__item--active");
+      currentItemLi.classList.remove("pagination__item--active");
+
+      liEl.classList.add("pagination__item--active");
+    });
+    return liEl;
+  }
+
+  displayList(postsData, rows, currentPage);
+  displayPagination(postsData, rows);
+}
+main();

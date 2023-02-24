@@ -6,13 +6,22 @@
   box-sizing: border-box;
   font-family: "Comfortaa", cursive;
 }
+body {
+  background-color: azure;
+}
+
 header {
   background-color: lightgray;
   height: 50px;
+  width: 100%;
+  position: fixed;
+  top: 0;
 }
 nav {
   height: inherit;
+  width: inherit;
   display: flex;
+  justify-content: start;
   align-items: center;
 }
 nav > a {
@@ -20,6 +29,12 @@ nav > a {
   color: black;
   font-size: 20px;
   padding: 0 30px;
+}
+nav > a:hover {
+  color: azure;
+}
+main {
+  margin: 50px;
 }
 .about_us {
   display: flex;
@@ -61,6 +76,9 @@ nav > a {
   padding: 0 10px;
   border-radius: 5px;
 }
+.my_game button:hover {
+  background-color: lightseagreen;
+}
 .my_game input {
   background-color: lightgray;
   outline: none;
@@ -90,7 +108,11 @@ footer {
   display: flex;
   justify-content: center;
   align-items: center;
+  border-radius: 10px;
   background-color: burlywood;
+}
+.choosed_block-container > div:hover {
+  border: 3px solid black;
 }
 .choosed_element {
   border: 3px solid black;
@@ -107,4 +129,22 @@ footer {
   padding: 10px;
   border-radius: 10px;
   background-color: lightsteelblue;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+}
+.pagination__list {
+  display: flex;
+  list-style-type: none;
+}
+.pagination__item {
+  padding: 8px;
+  margin: 8px;
+  cursor: pointer;
+}
+.pagination__item--active {
+  border-radius: 10px;
+  background-color: lightsteelblue;
+  color: darkblue;
 }
