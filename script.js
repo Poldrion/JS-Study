@@ -117,7 +117,6 @@ async function main() {
   let rows = 10;
 
   function displayList(arrData, rowPerPage, page) {
-    // const postsEl = document.querySelector(".posts_block-container");
     postsBlock.innerHTML = "";
     page--;
 
@@ -126,11 +125,7 @@ async function main() {
     const paginatedData = arrData.slice(start, end);
 
     paginatedData.forEach((element) => {
-      // const postEl = document.createElement("div");
-      // postEl.classList.add("posts_block-container");
-      // postEl.innerText = `${element.title}`;
       addPost(element.title, element.body);
-      // postsEl.appendChild(postEl);
     });
   }
   function displayPagination(arrData, rowPerPage) {
